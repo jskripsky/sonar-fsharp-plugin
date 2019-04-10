@@ -14,7 +14,8 @@ let getAstByContent(file : string, input : string) =
 
     // Run the first phase (untyped parsing) of the compiler
     let parseFileResults = 
-        checker.ParseFileInProject(file, input, projOptions) 
+        let (parsingOptions, errorInfos) = checker.GetParsingOptionsFromProjectOptions(projOptions)
+        checker.ParseFile(file, input, parsingOptions)
         |> Async.RunSynchronously
             
     parseFileResults.ParseTree
@@ -31,7 +32,8 @@ let getAstByFile(file : string) =
 
     // Run the first phase (untyped parsing) of the compiler
     let parseFileResults = 
-        checker.ParseFileInProject(file, input, projOptions) 
+        let (parsingOptions, errorInfos) = checker.GetParsingOptionsFromProjectOptions(projOptions)
+        checker.ParseFile(file, input, parsingOptions)
         |> Async.RunSynchronously
             
     parseFileResults.ParseTree

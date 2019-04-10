@@ -32,8 +32,9 @@ type SQAnalyser() =
                 |> Async.RunSynchronously
 
             // Run the first phase (untyped parsing) of the compiler
-            let parseFileResults = 
-                checker.ParseFileInProject(path, input, projOptions) 
+            let parseFileResults =
+                let (parsingOptions, errorInfos) = checker.GetParsingOptionsFromProjectOptions(projOptions)
+                checker.ParseFile(path, input, parsingOptions)
                 |> Async.RunSynchronously
             
             parseFileResults.ParseTree
