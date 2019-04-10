@@ -2,7 +2,7 @@
 namespace FsSonarRunnerCore
 
 open FSharp.Compiler.Ast
-open FSharp.Compiler
+open FSharp.Compiler.Range
 open FSharp.Compiler.SourceCodeServices
 
 module UntypedAstUtils =
@@ -114,11 +114,11 @@ module UntypedAstUtils =
         let mutable functionNodesRanges = Set.empty
         let mutable functionNodes = List.Empty
 
-        let addToUniqueRange(range : Range.range) =
+        let addToUniqueRange(range: range) =
             if not(uniqueLines.Contains(range.StartLine)) then
                 uniqueLines <- uniqueLines.Add(range.StartLine)
 
-        let addToUniqueFunctions(range : Range.range, binding) =
+        let addToUniqueFunctions(range: range, binding) =
             if not(functionNodesRanges.Contains(range.StartLine)) then
                 functionNodesRanges <- functionNodesRanges.Add(range.StartLine)
                 functionNodes <- functionNodes @ [binding]
