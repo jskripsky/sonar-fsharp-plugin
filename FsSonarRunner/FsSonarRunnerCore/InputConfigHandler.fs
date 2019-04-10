@@ -9,19 +9,18 @@ let CreateALintConfiguration(path : string) =
         let sonarConfig = ConfHelper.InputConfigution.Parse(File.ReadAllText(path))
         {
             Configuration.IgnoreFiles = None
-            Analysers = Map(Seq.concat
-                        [
-                            (Map.toSeq (NamingConventionsConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (SourceLengthConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (BindingConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (NumberOfItemsConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (NestedStatementsConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (TypographyConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (FunctionReimplementationConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (RaiseWithTooManyArgumentsConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (HintsConfig.SonarConfiguration(sonarConfig)));
-                            (Map.toSeq (RedundantNewKeywordConfig.SonarConfiguration(sonarConfig)));
-                        ])
+            Analysers = Map(Seq.concat [
+                (Map.toSeq (NamingConventionsConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (SourceLengthConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (BindingConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (NumberOfItemsConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (NestedStatementsConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (TypographyConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (FunctionReimplementationConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (RaiseWithTooManyArgumentsConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (HintsConfig.SonarConfiguration(sonarConfig)));
+                (Map.toSeq (RedundantNewKeywordConfig.SonarConfiguration(sonarConfig)));
+            ])
         }
     else
         FSharpLint.Framework.Configuration.defaultConfiguration
