@@ -1,11 +1,8 @@
 ﻿namespace FsSonarRunnerCore
 
-open FSharp.Compiler.Ast
 open FSharp.Compiler.SourceCodeServices
 open System.Text
-open System.IO
 open System.Xml
-open System.Xml.Linq
 
 type SonarResoureMetrics(path : string) =  
     member val ResourcePath : string = path with get
@@ -23,9 +20,9 @@ type SonarResoureMetrics(path : string) =
 type SQAnalyser() =
 
     let mutable resources : SonarResoureMetrics List = List.Empty
-    let resourcesLocker = new System.Object()
+    let resourcesLocker = obj()
 
-    let GatherMetrics(path : string, input : string, resourceMetric : SonarResoureMetrics) =
+    let gatherMetrics(path : string, input : string, resourceMetric : SonarResoureMetrics) =
         let parseTree = 
             let checker = FSharpChecker.Create()
 
@@ -62,8 +59,8 @@ type SQAnalyser() =
         resourceMetric.CopyPastTokens <- FsSonarRunnerCore.UntypedAstUtils.getDumpToken(lines)
 
     member this.GatherMetricsForResource(path : string, input : string) =
-        let resourceMetric = new SonarResoureMetrics(path)
-        GatherMetrics(path, input, resourceMetric)
+        let resourceMetric = SonarResoureMetrics(path)
+        gatherMetrics(path, input, resourceMetric)
         resourceMetric
 
     member this.RunAnalyses(path : string, input : string, inputXmlConfig : string) =  
@@ -77,7 +74,7 @@ type SQAnalyser() =
     member this.RunLint(path : string, input : string, inputXmlConfig : string) = 
         // run lint
         try            
-            let lintRunner = new FsLintRunner(path, new SonarRules(), InputConfigHandler.CreateALintConfiguration(inputXmlConfig))
+            let lintRunner = FsLintRunner(path, SonarRules(), InputConfigHandler.CreateALintConfiguration(inputXmlConfig))
             lintRunner.ExecuteAnalysis()
         with
         | ex -> printf "Lint Execution Failed %A" ex
@@ -91,7 +88,7 @@ type SQAnalyser() =
 
     member this.WriteXmlToDisk(xmlOutPath : string, printtoconsole : bool) = 
         printf "Write ouput xml to file %s\r\n" xmlOutPath
-        let xmlOutSettings = new XmlWriterSettings(Encoding = Encoding.UTF8, Indent = true, IndentChars = "  ")
+        let xmlOutSettings = XmlWriterSettings(Encoding = Encoding.UTF8, Indent = true, IndentChars = "  ")
         use xmlOut = XmlWriter.Create(xmlOutPath, xmlOutSettings)
         xmlOut.WriteStartElement("AnalysisOutput") // 1
         xmlOut.WriteStartElement("Files") // 2

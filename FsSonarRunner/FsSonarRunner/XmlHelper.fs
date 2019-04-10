@@ -1,11 +1,6 @@
 ﻿module XmlHelper
 
-open System
-open System.IO
-open System.Text
 open System.Text.RegularExpressions
-open FsSonarRunnerCore
-open System.Xml.Linq
 open FSharp.Data
 
 type InputXml = XmlProvider<""" 
@@ -58,7 +53,7 @@ type InputXml = XmlProvider<"""
 // parse command using regex
 // if matched, return (command name, command value) as a tuple
 let (|Command|_|) (s:string) =
-    let r = new Regex(@"^(?:-{1,2}|\/)(?<command>\w+)[=:]*(?<value>.*)$",RegexOptions.IgnoreCase)
+    let r = Regex(@"^(?:-{1,2}|\/)(?<command>\w+)[=:]*(?<value>.*)$",RegexOptions.IgnoreCase)
     let m = r.Match(s)
     if m.Success then 
         Some(m.Groups.["command"].Value.ToLower(), m.Groups.["value"].Value)
@@ -74,10 +69,10 @@ let (|Command|_|) (s:string) =
 let parseArgs (args:string seq) =
     args 
     |> Seq.map (fun i -> 
-                        match i with
-                        | Command (n,v) -> (n,v) // command
-                        | _ -> ("",i)            // data
-                       )
+      match i with
+      | Command (n,v) -> (n,v) // command
+      | _ -> ("",i)            // data
+    )
     |> Seq.scan (fun (sn,_) (n,v) -> if n.Length>0 then (n,v) else (sn,v)) ("","")
     |> Seq.skip 1
     |> Seq.groupBy (fun (n,_) -> n)

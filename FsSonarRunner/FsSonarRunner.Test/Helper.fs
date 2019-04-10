@@ -1,11 +1,7 @@
 ﻿module Helper
 
-open System
 open System.IO
-open Microsoft.FSharp.Compiler.Ast
-open Microsoft.FSharp.Compiler.SourceCodeServices
-open FsSonarRunnerCore
-open System.Xml.Linq
+open FSharp.Compiler.SourceCodeServices
 open FSharp.Data
 
 let getAstByContent(file : string, input : string) =

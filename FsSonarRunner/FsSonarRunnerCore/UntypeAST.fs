@@ -1,13 +1,11 @@
 ﻿// This code borrowed from https://github.com/fsprojects/VisualFSharpPowerTools/
 namespace FsSonarRunnerCore
 
+open FSharp.Compiler.Ast
+open FSharp.Compiler
+open FSharp.Compiler.SourceCodeServices
+
 module UntypedAstUtils =
-    open System
-
-    open FSharp.Compiler.Ast   
-    open FSharp.Compiler
-    open FSharp.Compiler.SourceCodeServices
-
     type TokenData() =
         member val Line : int = 0 with get, set
         member val LeftColoumn : int = 0 with get, set
@@ -32,7 +30,7 @@ module UntypedAstUtils =
 
         let createTokenData(line : int, tok : FSharpTokenInfo, extractStr : bool) =
 
-            let data = new TokenData(Line = line, LeftColoumn = tok.LeftColumn, RightColoumn = tok.RightColumn, Type = tok.TokenName)
+            let data = TokenData(Line = line, LeftColoumn = tok.LeftColumn, RightColoumn = tok.RightColumn, Type = tok.TokenName)
             if extractStr then
                 data.Content <- content.[line - 1].Substring(tok.LeftColumn, tok.RightColumn - tok.LeftColumn + 1)
             else
@@ -80,7 +78,7 @@ module UntypedAstUtils =
             match tok.TokenName with
                 | "STRING"
                 | "STRING_TEXT" ->
-                    if dontAddNext = false then
+                    if not dontAddNext then
                         let tok = createTokenData(count, tok, false)
                         let lenght = content.[tok.Line - 1].Length
                         if tok.RightColoumn < lenght then
@@ -377,6 +375,8 @@ module UntypedAstUtils =
                     addToUniqueRange(d.Range)
                     visitMember d
 
+            | _ -> ()
+
 
         let rec visitDeclarations decls = 
             for declaration in decls do
@@ -439,5 +439,3 @@ module UntypedAstUtils =
         match ast with
         | Some data -> data.Range.EndLine - data.Range.StartLine + 1
         | _ -> -1
-
-

@@ -1,6 +1,5 @@
 ﻿namespace FsSonarRunnerCore.Test
 
-open System.IO
 open NUnit.Framework
 open FsSonarRunnerCore
 

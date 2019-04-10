@@ -1,7 +1,5 @@
 ﻿module HintsConfig
 
-open System.Net
-
 open FParsec
 open FSharpLint.Framework.HintParser
 
