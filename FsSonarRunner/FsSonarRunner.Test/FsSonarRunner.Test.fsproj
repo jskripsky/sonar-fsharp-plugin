@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>FsSonarRunner.Test</AssemblyName>
   </PropertyGroup>
 
@@ -22,6 +23,8 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Compiler.Service" Version="28.0.0" />
     <PackageReference Include="FSharp.Data" Version="3.0.1" />
-    <PackageReference Include="NUnitLite" Version="3.11.0" />
+    <PackageReference Include="nunit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
 </Project>
